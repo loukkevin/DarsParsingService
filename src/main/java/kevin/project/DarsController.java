@@ -20,9 +20,4 @@ public class DarsController {
 	        return parser.parse(url);
 	    }
             
-@RequestMapping("/")
-@ResponseBody
-String home() {
-    return "Dars Parsing Service";
-    }
 }
