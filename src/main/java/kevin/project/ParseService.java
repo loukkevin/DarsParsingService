@@ -33,8 +33,8 @@ List<Elective> electives;
 	public ProgramRequirements parse(String url) throws IOException {
 		long startTime = System.nanoTime();
                 File input = new File (url);
-                document = Jsoup.parse(input, "UTF-8");//local file testing 
-		//doc = Jsoup.connect(url).get();//actual URL input
+                //document = Jsoup.parse(input, "UTF-8");//local file testing 
+		document = Jsoup.connect(url).get();//actual URL input
 		System.out.println("DARS Parsing");
 		courseTaken();
 
