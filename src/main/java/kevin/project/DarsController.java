@@ -18,6 +18,8 @@ public class DarsController {
 	    public ProgramRequirements parseDarsFile(@RequestParam(value="darsURL", required=true) String url) throws IOException {
 	        return parser.parse(url);
 	    }
+            
+@CrossOrigin(origins = "https://obscure-shelf-53073.herokuapp.com")
 @RequestMapping("/getCourseInformation")
 	    public Course getCourseInformation(@RequestParam(value="name", required=true) String course) throws IOException {
 	        return parser.getCourseInformation(course);
