@@ -136,14 +136,16 @@ public class Elective {
             if (value.contains(courseType)) {//first course of type
                 if (value.length() > 4) {
                     System.out.println(value);
-                    getCourseInformation(value);
+                    electiveCourses.add(new Course(value,null,0,"empty description",null));
+                    //getCourseInformation(value);
 
                 }
             } else if (!value.contains(courseType)) {//remaining
                 String courseTypeAndNumber = courseType + value;
                 if (courseTypeAndNumber.length() > 4) {
                     System.out.println(courseTypeAndNumber);
-                    getCourseInformation(courseTypeAndNumber);
+                    electiveCourses.add(new Course(courseTypeAndNumber,null,0,"empty description",null));
+                    //getCourseInformation(courseTypeAndNumber);
                 }
             }
             //check to see if next value contains the next course type

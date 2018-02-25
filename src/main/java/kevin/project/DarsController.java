@@ -18,4 +18,12 @@ public class DarsController {
 	    public ProgramRequirements parseDarsFile(@RequestParam(value="darsURL", required=true) String url) throws IOException {
 	        return parser.parse(url);
 	    }
+@RequestMapping("/getCourseInformation")
+	    public Course getCourseInformation(@RequestParam(value="name", required=true) String course) throws IOException {
+	        return parser.getCourseInformation(course);
+	    }
+@RequestMapping("/error")
+	    String home() {
+        return "Hello World! This is an error page. Sorry you didn't find what you were looking for. Try /parse or /getCourseInformation";
+    }
 }
