@@ -22,8 +22,4 @@ public class DarsController {
 	    public Course getCourseInformation(@RequestParam(value="name", required=true) String course) throws IOException {
 	        return parser.getCourseInformation(course);
 	    }
-@RequestMapping("/error")
-	    String home() {
-        return "Hello World! This is an error page. Sorry you didn't find what you were looking for. Try /parse or /getCourseInformation";
-    }
 }
