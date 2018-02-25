@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class DarsController {
 @Autowired ParseService parser;
 
-@CrossOrigin(origins = {"http://localhost:3000","https://obscure-shelf-53073.herokuapp.com"})
+@CrossOrigin(origins = "https://obscure-shelf-53073.herokuapp.com")
 @RequestMapping("/parse")
 	    public ProgramRequirements parseDarsFile(@RequestParam(value="darsURL", required=true) String url) throws IOException {
 	        return parser.parse(url);

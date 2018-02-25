@@ -14,11 +14,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @EnableAutoConfiguration
 public class Application {
 
-@RequestMapping("/")
-String home() {
-    return "Dars Parsing Service";
-    }
-
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
