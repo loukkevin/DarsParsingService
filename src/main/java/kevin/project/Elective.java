@@ -115,7 +115,7 @@ public class Elective {
 
         //Retrieve courses and transform the data to be uniformly formatted
         String electiveCoursesString = electiveCoursesText.ownText().replaceAll("SELECT FROM: ", "");
-        if (electiveCoursesText.className().equals(electiveCoursesText.nextElementSibling().className())) {
+        if (electiveCoursesText.nextElementSibling() != null && electiveCoursesText.className().equals(electiveCoursesText.nextElementSibling().className())) {
             electiveCoursesString += (" " + electiveCoursesText.nextElementSibling().ownText());
         }
 
