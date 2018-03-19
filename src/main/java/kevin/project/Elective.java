@@ -63,10 +63,10 @@ public class Elective {
         this.title = title;
     }
 
-    public Elective(Element titleElement) throws IOException {
+    public Elective(Element titleElement, String title) throws IOException {
         Element electiveTitle = titleElement;
         Element electiveCoursesText = titleElement.nextElementSibling();
-        this.title = titleElement.ownText();
+        this.title = title;
         this.electiveCourses = new ArrayList();
 
         String electiveTitleClassName = electiveTitle.className();
@@ -115,8 +115,9 @@ public class Elective {
 
         //Retrieve courses and transform the data to be uniformly formatted
         String electiveCoursesString = electiveCoursesText.ownText().replaceAll("SELECT FROM: ", "");
-        if (electiveCoursesText.nextElementSibling() != null && electiveCoursesText.className().equals(electiveCoursesText.nextElementSibling().className())) {
-            electiveCoursesString += (" " + electiveCoursesText.nextElementSibling().ownText());
+        while (electiveCoursesText.nextElementSibling() != null && electiveCoursesText.className().equals(electiveCoursesText.nextElementSibling().className())) {
+            electiveCoursesString = electiveCoursesString + " " + electiveCoursesText.nextElementSibling().ownText();
+            electiveCoursesText = electiveCoursesText.nextElementSibling();
         }
 
         System.out.println(title);

@@ -22,28 +22,27 @@ import org.jsoup.nodes.Attributes;
 @Component
 public class ParseService {
 String url;
-Document document; 
 List<Course> courseOk;
 List<String> courseNotOk;
 List<String> courseNotOkTitle;
 List<Requirement> requirements;
-List<Elective> electives;
-	
+List<Elective> electives;	
+
 	/**
 	 * @param args
 	 * @throws IOException 
 	 */
-	public ProgramRequirements parse(String url) throws IOException {
+	public ProgramRequirements parse(Document document) throws IOException {
 		long startTime = System.nanoTime();
-                File input = new File (url);
-                //document = Jsoup.parse(input, "UTF-8");//local file testing 
-		document = Jsoup.connect(url).get();//actual URL input
+//                File input = new File (url);
+//                document = handler.createDocument(url);//local file testing 
+//		//document = Jsoup.connect(url).get();//actual URL input
 		System.out.println("DARS Parsing");
-		courseTaken();
+		courseTaken(document);
 
-		displayCourseTaken();
+		displayCourseTaken(document);
 		
-		courseNotTaken();
+		courseNotTaken(document);
 
 		ProgramRequirements progReqs = new ProgramRequirements(requirements,electives,courseOk);
                 String requirementsJson = new Gson().toJson(requirements);
@@ -60,6 +59,7 @@ List<Elective> electives;
 	}
         
         public Course getCourseInformation(String course) throws IOException {
+        List<String> addSemesterOffered = new ArrayList();
         String catalogUrl = "https://catalog.stcloudstate.edu/Catalog/ViewCatalog.aspx?pageid=viewcatalog&catalogid=8&loaduseredits=True&search=true&keywords=";
         String temp = addSpaceToName(course);
         //Change courseName to Dept%20Number, ex: SE 490 --> SE%20490
@@ -127,7 +127,7 @@ List<Elective> electives;
                 }
             }
 
-            List<String> addSemesterOffered = new ArrayList();
+            
             for (Element semester : semesterOffered) {//check for child nodes to detect if more than one semester offered
 
                 if (semester.nextElementSibling().children().isEmpty()) {//only one semester offered
@@ -159,10 +159,15 @@ List<Elective> electives;
             }
             return new Course(course, addPrerequisites, addCredits, addDescription, addSemesterOffered);
         }
-        else
-            return new Course(course, null, 0, "no course information available", null);
+        else{
+            addSemesterOffered.add("Fall");
+            addSemesterOffered.add("Spring");
+            addSemesterOffered.add("Summer");
+            return new Course(course, null, 3, "no course information available, the system will automatically assign 3 credits to this course and allow scheduling in any semester. Check with an advisor to confirm this course's scheduling.", addSemesterOffered);
+            
+        }
     }
-	private void courseNotTaken() throws IOException {
+	private void courseNotTaken(Document document) throws IOException {
                 requirements = new ArrayList();
                 electives = new ArrayList();
 		courseNotOk = new ArrayList();
@@ -178,7 +183,7 @@ List<Elective> electives;
 		}
 		
 		for(Element title:notTakenTitle) {
-			String requiredTitle = title.text();//;replaceAll("[0-9]+|\\-|\\)","").trim();
+			String requiredTitle = title.ownText();//;replaceAll("[0-9]+|\\-|\\)","").trim();
                         //System.out.println(requiredTitle);
 			courseNotOkTitle.add(requiredTitle);
                         
@@ -188,15 +193,27 @@ List<Elective> electives;
                         Requirement req = new Requirement(title);
                         System.out.println(req.getTitle());
                         System.out.println(req.getRequiredCourse().getName());
-                        if (req.getRequiredCourse().getName().length() > 4 && req.getRequiredCourse().getName().length() < 8)//to avoid adding garbage to arrayList
+                        if (req.getRequiredCourse().getName().length() > 4 && req.getRequiredCourse().getName().length() < 8)//to avoid adding too much garbage to arrayList
                         requirements.add(req);
                         }
-                        if ((title.ownText().contains("OR") || title.ownText().contains("Complete")) && !title.className().equals(title.previousElementSibling().className())){
-                        Elective elective = new Elective(title);
+                        
+                        //Check if this is the first title element for an elective section, to only create one elective object per section
+                        if (title.previousElementSibling() != null && !title.className().equals(title.previousElementSibling().className())){
+                            while (title.nextElementSibling() != null && title.className().equals(title.nextElementSibling().className())){
+                                title = title.nextElementSibling();
+                                requiredTitle = requiredTitle + " " + title.ownText();
+                            }
+                            
+                        if ((requiredTitle.contains("OR") || 
+                             requiredTitle.contains("Complete") || requiredTitle.contains("Electives"))){
+                            
+                        Elective elective = new Elective(title, requiredTitle);
                         //System.out.println(elective.getTitle());
                         //System.out.println(elective.getCourse().getTitle);
                         electives.add(elective);
-                        }
+                            }
+                        }//elective block
+           
 		}
 	
 	}
@@ -204,7 +221,7 @@ List<Elective> electives;
 	/**
 	 * 
 	 */
-	private void displayCourseTaken() {
+	private void displayCourseTaken(Document document1) {
 		for(int i = 0; i<courseOk.size(); i++) {		
 			if(courseOk.get(i).equals("NAT:ELEC")) {
 			courseOk.remove(i);
@@ -221,7 +238,7 @@ List<Elective> electives;
 	/**
 	 *  Course Taken
 	 */
-	private void courseTaken() {
+	private void courseTaken(Document document) {
 		courseOk = new ArrayList();
 		Elements ctable = document.select("span[class=auditLineType_22_okSubrequirementCourses]");
 		System.out.println("********************");

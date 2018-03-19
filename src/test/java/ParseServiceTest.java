@@ -1,0 +1,69 @@
+
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.stream.Collectors;
+import kevin.project.DocumentHandler;
+import kevin.project.ParseService;
+import kevin.project.ProgramRequirements;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.junit.Assert;
+import org.junit.Test;
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/**
+ *
+ * @author Kevin
+ */
+public class ParseServiceTest{
+    ParseService parseService = new ParseService();
+    DocumentHandler documentHandler;
+    
+    @Test
+    public void testMmeMajor () throws IOException {
+        
+        InputStream inputStream = ClassLoader.getSystemResourceAsStream("justinDars.html");
+        String html = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
+        Document document = Jsoup.parse(html);
+        ProgramRequirements programRequirements = parseService.parse(document);
+
+        Assert.assertEquals("expected electives list to be size 8", 8, programRequirements.getElectives().size());
+        Assert.assertEquals("expected coursesTaken list to be size 21", 21, programRequirements.getCoursesTaken().size());
+        Assert.assertEquals("expected requirements list to be size 13", 13, programRequirements.getRequirements().size());
+    }
+    @Test
+    public void testSeMajor () throws IOException {
+        
+        InputStream inputStream = ClassLoader.getSystemResourceAsStream("devinDars.html");
+        String html = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
+        Document document = Jsoup.parse(html);
+        ProgramRequirements programRequirements = parseService.parse(document);
+        
+        Assert.assertEquals("expected electives list to be size 6", 6, programRequirements.getElectives().size());
+        Assert.assertEquals("expected coursesTaken list to be size 57", 57, programRequirements.getCoursesTaken().size());
+        Assert.assertEquals("expected requirements list to be size 21", 21, programRequirements.getRequirements().size());
+    }
+    @Test
+    public void testBlankFile () throws IOException {
+        
+        InputStream inputStream = ClassLoader.getSystemResourceAsStream("blank.html");
+        String html = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
+        Document document = Jsoup.parse(html);
+        ProgramRequirements programRequirements = parseService.parse(document);
+        
+        Assert.assertEquals("expected electives list to be size 0", 0, programRequirements.getElectives().size());
+        Assert.assertEquals("expected coursesTaken list to be size 0", 0, programRequirements.getCoursesTaken().size());
+        Assert.assertEquals("expected requirements list to be size 0", 0, programRequirements.getRequirements().size());
+    }
+    
+
+}

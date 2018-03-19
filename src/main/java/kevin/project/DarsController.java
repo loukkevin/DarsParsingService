@@ -13,13 +13,15 @@ import org.springframework.web.bind.annotation.RestController;
 public class DarsController {
 
 @Autowired ParseService parser;
-@CrossOrigin(origins = "https://obscure-shelf-53073.herokuapp.com")
+@Autowired DocumentHandler documentHandler;
+@CrossOrigin(origins = "https://scsu-gps.herokuapp.com/")
 @RequestMapping("/parse")
 	    public ProgramRequirements parseDarsFile(@RequestParam(value="darsURL", required=true) String url) throws IOException {
-	        return parser.parse(url);
+                
+	        return parser.parse(documentHandler.createDocument(url));
 	    }
             
-@CrossOrigin(origins = "https://obscure-shelf-53073.herokuapp.com")
+@CrossOrigin(origins = "https://scsu-gps.herokuapp.com/")
 @RequestMapping("/getCourseInformation")
 	    public Course getCourseInformation(@RequestParam(value="name", required=true) String course) throws IOException {
 	        return parser.getCourseInformation(course);
