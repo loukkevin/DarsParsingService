@@ -74,5 +74,15 @@ public class ParseServiceTest{
         Assert.assertEquals("Expected prerequisites to be size 2", 2, validCourse.getPrerequisites().size());
     }
     
+    @Test
+    public void testGetInvalidCourseInformation () throws IOException {
+    	String courseName = "SE492";
+    	Course validCourse = parseService.getCourseInformation(courseName);
+    	
+    	Assert.assertEquals("Expected prerequisites to be empty", true, validCourse.getPrerequisites().isEmpty());
+    	Assert.assertEquals("Expected credits to be 3", 3, validCourse.getCredits());
+    	Assert.assertEquals("Expected semestersOffered size to be 3", 3, validCourse.getSemestersOffered().size());
+    }
+    
 
 }

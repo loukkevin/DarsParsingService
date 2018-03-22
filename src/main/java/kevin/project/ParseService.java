@@ -60,6 +60,7 @@ List<Elective> electives;
         
         public Course getCourseInformation(String course) throws IOException {
         List<String> addSemesterOffered = new ArrayList();
+        List<String> addPrerequisites = new ArrayList();
         String catalogUrl = "https://catalog.stcloudstate.edu/Catalog/ViewCatalog.aspx?pageid=viewcatalog&catalogid=8&loaduseredits=True&search=true&keywords=";
         String temp = addSpaceToName(course);
         //Change courseName to Dept%20Number, ex: SE 490 --> SE%20490
@@ -108,7 +109,7 @@ List<Elective> electives;
                 System.out.println("Description:" + viewDetails.ownText());
 
             }
-            List<String> addPrerequisites = new ArrayList();
+
             for (Element prerequisite : prerequisites) {//check for child nodes to detect if more than one prereq
 
                 if (prerequisite.nextElementSibling().children().isEmpty()) {
@@ -163,13 +164,14 @@ List<Elective> electives;
                 System.out.println("Credits: " + viewDetails.ownText());
 
             }
+            System.out.println("Invalid course request");
             return new Course(course, addPrerequisites, addCredits, addDescription, addSemesterOffered);
         }
         else{
             addSemesterOffered.add("Fall");
             addSemesterOffered.add("Spring");
             addSemesterOffered.add("Summer");
-            return new Course(course, null, 3, "no course information available, the system will automatically assign 3 credits to this course and allow scheduling in any semester. Check with an advisor to confirm this course's scheduling.", addSemesterOffered);
+            return new Course(course, addPrerequisites, 3, "no course information available, the system will automatically assign 3 credits to this course and allow scheduling in any semester. Check with an advisor to confirm this course's scheduling.", addSemesterOffered);
             
         }
     }
@@ -195,7 +197,8 @@ List<Elective> electives;
                         
                         if (!title.ownText().contains("OR") && 
                                 !title.previousElementSibling().ownText().contains("OR") && 
-                                !title.ownText().contains("Complete")){  
+                                !title.ownText().contains("Complete") && !title.ownText().contains("GPA")
+                                && !title.ownText().contains("transcript") && !title.ownText().contains("credits")){  
                         Requirement req = new Requirement(title);
                         System.out.println(req.getTitle());
                         System.out.println(req.getRequiredCourse().getName());
