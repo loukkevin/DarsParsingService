@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.stream.Collectors;
+import kevin.project.Course;
 import kevin.project.DocumentHandler;
 import kevin.project.ParseService;
 import kevin.project.ProgramRequirements;
@@ -64,6 +65,13 @@ public class ParseServiceTest{
         Assert.assertEquals("expected electives list to be size 0", 0, programRequirements.getElectives().size());
         Assert.assertEquals("expected coursesTaken list to be size 0", 0, programRequirements.getCoursesTaken().size());
         Assert.assertEquals("expected requirements list to be size 0", 0, programRequirements.getRequirements().size());
+    }
+    
+    @Test
+    public void testGetValidCourseInformation () throws IOException {
+        String courseName = "SE490";
+        Course validCourse = parseService.getCourseInformation(courseName);
+        Assert.assertEquals("Expected prerequisites to be size 2", 2, validCourse.getPrerequisites().size());
     }
     
 

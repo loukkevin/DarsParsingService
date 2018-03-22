@@ -112,12 +112,18 @@ List<Elective> electives;
             for (Element prerequisite : prerequisites) {//check for child nodes to detect if more than one prereq
 
                 if (prerequisite.nextElementSibling().children().isEmpty()) {
-                    viewDetails = prerequisite.nextElementSibling().child(0);
-                    addPrerequisites.add(viewDetails.ownText());
-                    System.out.println("Prereqs:" + viewDetails.ownText());
+                    viewDetails = prerequisite.nextElementSibling();
+                    //check for multiple prerequisites contained in a single element
+                    String prereqString = viewDetails.ownText();
+                    if (prereqString.contains(",")){
+                        String [] prereqStringSplit = prereqString.split(",");
+                        for (String prereq: prereqStringSplit){
+                            addPrerequisites.add(prereq);
+                        }
+                    }
+                    System.out.println("Prereqs: " + prereqString);
                 } else {
                     List<String> prereqs = new ArrayList();
-                    String semestersOffered = "";
                     viewDetails = prerequisite.nextElementSibling();
                     Elements listElements = viewDetails.children();
                     for (Element item : listElements) {
