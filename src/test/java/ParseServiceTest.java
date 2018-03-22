@@ -48,7 +48,8 @@ public class ParseServiceTest{
         Document document = Jsoup.parse(html);
         ProgramRequirements programRequirements = parseService.parse(document);
         
-        Assert.assertEquals("expected electives list to be size 6", 6, programRequirements.getElectives().size());
+        Assert.assertEquals("expected electives list to be size 6", 6, programRequirements.getElectives().size()); //SE major should have 6 elective sections
+        Assert.assertEquals("expected se electives courses list to be size 11", 11, programRequirements.getElectives().get(3).getElectiveCourses().size()); //the SE major electives should have 11 courses available
         Assert.assertEquals("expected coursesTaken list to be size 57", 57, programRequirements.getCoursesTaken().size());
         Assert.assertEquals("expected requirements list to be size 21", 21, programRequirements.getRequirements().size());
     }

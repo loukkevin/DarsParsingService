@@ -119,7 +119,7 @@ public class Elective {
             electiveCoursesString = electiveCoursesString + " " + electiveCoursesText.nextElementSibling().ownText();
             electiveCoursesText = electiveCoursesText.nextElementSibling();
         }
-
+        electiveCoursesString = electiveCoursesString.replaceAll("\\([^)]*\\)", "");
         System.out.println(title);
         String[] coursesTypeString = electiveCoursesString.split("[0-9|,| |(|)]+");
         String[] coursesStringSplit = electiveCoursesString.split("[,| |(|)]+");
