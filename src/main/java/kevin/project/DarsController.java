@@ -21,7 +21,7 @@ public class DarsController {
 	        return parser.parse(documentHandler.createDocument(url));
 	    }
             
-@CrossOrigin(origins = "https://scsu-gps.herokuapp.com")
+@CrossOrigin(origins = "https://scsu-gps.herokuapp.com/")
 @RequestMapping("/getCourseInformation")
 	    public Course getCourseInformation(@RequestParam(value="name", required=true) String course) throws IOException {
 	        return parser.getCourseInformation(course);
