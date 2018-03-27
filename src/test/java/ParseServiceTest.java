@@ -67,22 +67,36 @@ public class ParseServiceTest{
         Assert.assertEquals("expected requirements list to be size 0", 0, programRequirements.getRequirements().size());
     }
     
+//    @Test
+//    public void testGetValidCourseInformation () throws IOException {
+//        String courseName = "SE490";
+//        Course validCourse = parseService.getCourseInformation(courseName);
+//        Assert.assertEquals("Expected prerequisites to be size 2", 2, validCourse.getPrerequisites().size());
+//    }
+//    
+//    @Test
+//    public void testGetInvalidCourseInformation () throws IOException {
+//    	String courseName = "SE492";
+//    	Course validCourse = parseService.getCourseInformation(courseName);
+//    	
+//    	Assert.assertEquals("Expected prerequisites to be empty", true, validCourse.getPrerequisites().isEmpty());
+//    	Assert.assertEquals("Expected credits to be 3", 3, validCourse.getCredits());
+//    	Assert.assertEquals("Expected semestersOffered size to be 3", 3, validCourse.getSemestersOffered().size());
+//    }
     @Test
-    public void testGetValidCourseInformation () throws IOException {
-        String courseName = "SE490";
-        Course validCourse = parseService.getCourseInformation(courseName);
-        Assert.assertEquals("Expected prerequisites to be size 2", 2, validCourse.getPrerequisites().size());
+    public void testPartiallyFullfilledElective () throws IOException {
+        System.out.println("Testing partially fulfilled elective file");
+    	InputStream inputStream = ClassLoader.getSystemResourceAsStream("partiallyCompleteElective.html");
+        String html = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
+        Document document = Jsoup.parse(html);
+        ProgramRequirements programRequirements = parseService.parse(document);
+        
+        Assert.assertEquals("expected electives list to be size 4", 4, programRequirements.getElectives().size());
+        Assert.assertEquals("expected coursesTaken list to be size 48", 48, programRequirements.getCoursesTaken().size());
+        Assert.assertEquals("expected requirements list to be size 13", 13, programRequirements.getRequirements().size());
     }
     
-    @Test
-    public void testGetInvalidCourseInformation () throws IOException {
-    	String courseName = "SE492";
-    	Course validCourse = parseService.getCourseInformation(courseName);
-    	
-    	Assert.assertEquals("Expected prerequisites to be empty", true, validCourse.getPrerequisites().isEmpty());
-    	Assert.assertEquals("Expected credits to be 3", 3, validCourse.getCredits());
-    	Assert.assertEquals("Expected semestersOffered size to be 3", 3, validCourse.getSemestersOffered().size());
-    }
+    
     
 
 }

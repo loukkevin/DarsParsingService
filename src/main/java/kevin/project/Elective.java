@@ -68,15 +68,21 @@ public class Elective {
         Element electiveCoursesText = titleElement.nextElementSibling();
         this.title = title;
         this.electiveCourses = new ArrayList();
-
+        int coursesAlreadyTaken = 0;
         String electiveTitleClassName = electiveTitle.className();
         boolean isCourseElement = false;
         while (isCourseElement == false) {//Check to see if the title is contained in more than one element
             if (electiveTitleClassName.equals(electiveCoursesText.className())) {
                 title = title.concat(" " + electiveCoursesText.ownText());
                 electiveCoursesText = electiveCoursesText.nextElementSibling();
-
-            } else {
+                //check if elective is partially fulfilled
+            } else if ((electiveCoursesText.nextElementSibling() != null && 
+                    electiveCoursesText.nextElementSibling().className().equals("auditLineType_23_noSubrequirementCourses")) || 
+                    electiveCoursesText.className().equals("auditLineType_23_noSubrequirementCourses") ){
+                electiveCoursesText = electiveCoursesText.nextElementSibling();
+                coursesAlreadyTaken++;
+            }
+            else {
                 isCourseElement = true;
             }
         }
@@ -104,7 +110,7 @@ public class Elective {
             while (!done) {
                 temp2 = temp[index];
                 if (temp2.contains("courses")) {
-                    this.numOfCourses = Integer.parseInt(temp[index - 1]);
+                    this.numOfCourses = Integer.parseInt(temp[index - 1]) - coursesAlreadyTaken;
                     done = true;
                 }
                 index++;
