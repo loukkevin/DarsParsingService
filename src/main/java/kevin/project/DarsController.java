@@ -14,13 +14,15 @@ public class DarsController {
 
 @Autowired ParseService parser;
 @Autowired DocumentHandler documentHandler;
-@CrossOrigin(origins = "https://scsu-gps.herokuapp.com")
+@CrossOrigin(origins = {"https://scsu-gps.herokuapp.com","localhost:3000"})
 @RequestMapping("/parse")
 	    public ProgramRequirements parseDarsFile(@RequestParam(value="darsURL", required=true) String url) throws IOException {
                 
 	        return parser.parse(documentHandler.createDocument(url));
-	    }      
-@CrossOrigin(origins = "https://scsu-gps.herokuapp.com")
+
+	    }
+            
+@CrossOrigin(origins = {"https://scsu-gps.herokuapp.com","http://localhost:3000"})
 @RequestMapping("/getCourseInformation")
 	    public Course getCourseInformation(@RequestParam(value="name", required=true) String course) throws IOException {
 	        return parser.getCourseInformation(course);
