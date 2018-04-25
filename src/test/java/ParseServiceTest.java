@@ -1,5 +1,6 @@
 
 
+import com.google.gson.Gson;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -36,6 +37,8 @@ public class ParseServiceTest{
         String html = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
         Document document = Jsoup.parse(html);
         ProgramRequirements programRequirements = parseService.parse(document);
+        String programJson = new Gson().toJson(programRequirements);
+        System.out.println(programJson);
 
         Assert.assertEquals("expected electives list to be size 8", 8, programRequirements.getElectives().size());
         Assert.assertEquals("expected coursesTaken list to be size 21", 21, programRequirements.getCoursesTaken().size());
