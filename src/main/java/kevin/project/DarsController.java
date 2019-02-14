@@ -14,7 +14,7 @@ public class DarsController {
 
 @Autowired ParseService parser;
 @Autowired DocumentHandler documentHandler;
-@CrossOrigin(origins = {"https://scsu-gps.herokuapp.com","http://localhost:3000"})
+@CrossOrigin(origins = {"https://scsu-gps.herokuapp.com","http://localhost:3000",})
 @RequestMapping("/parse")
 	    public ProgramRequirements parseDarsFile(@RequestParam(value="darsURL", required=true) String url) throws IOException {
                 
@@ -22,7 +22,7 @@ public class DarsController {
 
 	    }
             
-@CrossOrigin(origins = {"https://scsu-gps.herokuapp.com","http://localhost:3000"})
+@CrossOrigin(origins = {"https://scsu-gps.herokuapp.com","http://localhost:3000","http://kevinloukusa.com"})
 @RequestMapping("/getCourseInformation")
 	    public Course getCourseInformation(@RequestParam(value="name", required=true) String course) throws IOException {
 	        return parser.getCourseInformation(course);

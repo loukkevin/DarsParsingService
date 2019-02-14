@@ -70,12 +70,12 @@ public class ParseServiceTest{
         Assert.assertEquals("expected requirements list to be size 0", 0, programRequirements.getRequirements().size());
     }
     
-//    @Test
-//    public void testGetValidCourseInformation () throws IOException {
-//        String courseName = "SE490";
-//        Course validCourse = parseService.getCourseInformation(courseName);
-//        Assert.assertEquals("Expected prerequisites to be size 2", 2, validCourse.getPrerequisites().size());
-//    }
+    @Test
+   public void testGetValidCourseInformation () throws IOException {
+        String courseName = "SE490";
+        Course validCourse = parseService.getCourseInformation(courseName);
+        Assert.assertEquals("Expected prerequisites to be size 2", 2, validCourse.getPrerequisites().size());
+    }
 //    
 //    @Test
 //    public void testGetInvalidCourseInformation () throws IOException {
